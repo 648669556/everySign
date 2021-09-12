@@ -33,8 +33,7 @@ public class SendTask implements Runnable, Delayed {
     @Override
     public void run() {
         try {
-//            HttpClientHelper.doPostTask(this);
-            throw new IOException();
+            HttpClientHelper.doPostTask(this);
         } catch (IOException e) {
             log.error("sign failed, user: {}, cause: {}", userInfo, e);
             retry();
