@@ -2,6 +2,7 @@ package com.example.everysign.model;
 
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDateTime;
 
@@ -24,4 +25,16 @@ public class User {
 
     private String userId;
 
+    public User() {
+    }
+
+    public User(UserInfo userInfo) {
+        BeanUtils.copyProperties(userInfo, this);
+    }
+
+    public static User Convert(UserInfo userInfo) {
+        User user = new User();
+        BeanUtils.copyProperties(userInfo, user);
+        return user;
+    }
 }

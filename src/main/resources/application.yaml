@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: generalBean-plus-demo
+  datasource:
+    name: defaultDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.106.76.86:3305/minecraft?serverTimezone=UTC&characterEncoding=utf-8
+    username: Minecraft
+    password: Chen311696;
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:mapping/*.xml
+server:
+  port: 9238

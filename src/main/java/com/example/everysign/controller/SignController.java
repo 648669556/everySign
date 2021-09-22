@@ -1,7 +1,7 @@
 package com.example.everysign.controller;
 
 import com.example.everysign.model.request.AddUserRequest;
-import com.example.everysign.service.SignService;
+import com.example.everysign.service.impl.SignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

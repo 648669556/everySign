@@ -1,20 +1,26 @@
-package com.example.everysign.service;
+package com.example.everysign.service.impl;
 
 import com.example.everysign.model.SendTask;
 import com.example.everysign.model.User;
+import com.example.everysign.model.UserInfo;
 import com.example.everysign.model.request.AddUserRequest;
+import com.example.everysign.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
-import java.util.Collections;
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.*;
 
 @Service
+@Slf4j
+@Validated
 public class SignService {
-    Map<String, User> userMap = new ConcurrentHashMap<>();
-
+    @Autowired
+    UserService userService;
     BlockingQueue<SendTask> blockingQueue = new DelayQueue<>();
 
     Thread thread;
@@ -44,23 +50,29 @@ public class SignService {
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void inputUserInfo() {
-        System.out.println("今日要签到的人员填充");
+        log.info("今日要签到的人员填充");
         init();
         // 清空昨天重试失败遗留的任务
-        if(blockingQueue != null&& blockingQueue.size() > 0){
+        if (blockingQueue != null && blockingQueue.size() > 0) {
             blockingQueue.clear();
         }
+        List<UserInfo> userInfos = userService.listUser();
 
         //将用户信息放入队列中
-        for (User value : userMap.values()) {
-            blockingQueue.offer(SendTask.build(value, blockingQueue));
+        for (UserInfo userInfo : userInfos) {
+            blockingQueue.offer(SendTask.build(User.Convert(userInfo), blockingQueue));
         }
     }
 
-    public void saveUser(AddUserRequest addUserRequest) {
-        User orDefault = userMap.getOrDefault(addUserRequest.getUserCode(), new User());
-        BeanUtils.copyProperties(addUserRequest, orDefault);
-        userMap.put(addUserRequest.getUserCode(), orDefault);
-        System.out.println(orDefault);
+    public boolean saveUser(AddUserRequest addUserRequest) {
+        UserInfo userInfo = new UserInfo();
+        BeanUtils.copyProperties(addUserRequest, userInfo);
+        Boolean result = userService.saveUser(userInfo);
+        if (result) {
+            log.info("用户信息维护：\n {}", userInfo);
+        } else {
+            log.info("维护结果：{}", false);
+        }
+        return result;
     }
 }
