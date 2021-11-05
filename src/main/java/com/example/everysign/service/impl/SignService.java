@@ -25,8 +25,12 @@ public class SignService {
 
     Thread thread;
 
+    public void stop() {
+        thread.interrupt();
+    }
+
     public void init() {
-        if (thread == null) {
+        if (thread == null || thread.isInterrupted()) {
             thread = new Thread(() -> {
                 while (!Thread.interrupted()) {
                     // 防止无可运行任务时cpu出现盲等
