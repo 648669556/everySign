@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
@@ -19,11 +20,19 @@ import java.util.concurrent.TimeUnit;
 public class SendTask implements Runnable, Delayed {
 
     private final Long retryTime = 60L;
+
     public static SendTask build(User userInfo, BlockingQueue blockingQueue) {
         SendTask sendTask = new SendTask();
+        userInfo.setSignTime(randomNextTime(userInfo.getSignTime()));
         sendTask.setUserInfo(userInfo);
         sendTask.setBlockingQueue(blockingQueue);
         return sendTask;
+    }
+
+    private static LocalDateTime randomNextTime(LocalDateTime signTime) {
+        Random random = new Random();
+        final int gap = random.nextInt(120);
+        return signTime.plusMinutes(gap);
     }
 
     User userInfo;
@@ -54,7 +63,7 @@ public class SendTask implements Runnable, Delayed {
         return (hour * 10000 + minute * 100 + second);
     }
 
-    private void retry(){
+    private void retry() {
         User user = new User();
         BeanUtils.copyProperties(userInfo, user);
         user.setSignTime(LocalDateTime.now().plusMinutes(retryTime));
