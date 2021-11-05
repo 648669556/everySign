@@ -15,7 +15,7 @@ public class UserServiceTest {
     public AddUserRequest mockAddRequest() {
         AddUserRequest addUserRequest = new AddUserRequest();
         addUserRequest.setUserCode(userCode.toString());
-        addUserRequest.setSignAddress("30.202685,120.248687");
+        addUserRequest.setSignAddress("30.121900,120.143900");
         addUserRequest.setSignTime(LocalDateTime.of(2021, 9, 3, 10, 30, 23));
         return addUserRequest;
     }

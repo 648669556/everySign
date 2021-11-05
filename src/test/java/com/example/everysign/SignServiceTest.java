@@ -15,13 +15,13 @@ public class SignServiceTest {
     @Autowired
     SignService signService;
 
-    BigInteger userCode = new BigInteger("318102030243");
+    BigInteger userCode = new BigInteger("318102030244");
 
     public AddUserRequest mockAddRequest() {
         AddUserRequest addUserRequest = new AddUserRequest();
         addUserRequest.setUserCode(userCode.toString());
         addUserRequest.setSignAddress("30.202685,120.248687");
-        addUserRequest.setSignTime(LocalDateTime.of(2021, 9, 3, 10, 30, 23));
+//        addUserRequest.setSignTime(LocalDateTime.of(2021, 9, 3, 10, 30, 23));
         addUserRequest.setUserId(userCode.toString());
         addUserRequest.setUserName("测试人员");
         addUserRequest.setSignAddressName("测试地点");
